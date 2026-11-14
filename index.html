@@ -79,7 +79,7 @@
             width: 100%;
         }
 
-        /* Sidebar Navigation */
+        /* Sidebar Navigation (Desktop) */
         aside {
             width: 250px;
             background: var(--bg-sidebar);
@@ -88,6 +88,7 @@
             position: fixed;
             overflow-y: auto;
             padding: 1.25rem 0.75rem;
+            transition: all 0.3s ease;
         }
 
         .sidebar-title {
@@ -103,10 +104,9 @@
         .nav-menu {
             list-style: none;
             margin-bottom: 1.5rem;
-        }
-
-        .nav-item {
-            margin-bottom: 0.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
         }
 
         .nav-btn {
@@ -123,6 +123,7 @@
             align-items: center;
             gap: 0.5rem;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }
 
         .nav-btn:hover {
@@ -143,16 +144,51 @@
             flex: 1;
             padding: 2rem;
             max-width: calc(100% - 250px);
+            transition: margin 0.3s ease;
         }
 
+        /* Responsive adjustments for Mobile */
         @media (max-width: 850px) {
-            aside { width: 200px; }
-            main { margin-left: 200px; max-width: calc(100% - 200px); }
-        }
-
-        @media (max-width: 700px) {
-            aside { display: none; }
-            main { margin-left: 0; max-width: 100%; padding: 1rem; }
+            aside {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                top: 52px;
+                left: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 0.5rem 0.75rem;
+                z-index: 99;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar-title { display: none; }
+            .nav-menu {
+                flex-direction: row;
+                margin-bottom: 0;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            .nav-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+                border-left: none !important;
+                border-bottom: 2px solid transparent;
+                border-radius: 4px;
+            }
+            .nav-btn.active {
+                border-bottom: 2px solid var(--accent);
+                background: rgba(245, 158, 11, 0.07);
+            }
+            main {
+                margin-left: 0;
+                margin-top: 55px;
+                max-width: 100%;
+                padding: 1rem;
+            }
         }
 
         .panel {
@@ -195,7 +231,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Minimal Reading Box */
         .reading-box {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -210,7 +245,6 @@
             line-height: 1.5;
         }
 
-        /* Forms & Inputs */
         .grid-form {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -264,7 +298,6 @@
             background: var(--accent-hover);
         }
 
-        /* Results Grid */
         .results-wrapper {
             margin-top: 1.25rem;
             display: none;
@@ -332,7 +365,7 @@
     </header>
 
     <div class="app-container">
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation (Desktop) / Horizontal Scroll Bar (Mobile) -->
         <aside>
             <div class="sidebar-title">Módulos</div>
             <ul class="nav-menu">

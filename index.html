@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Rápida de Concreto | Obra y Diseño</title>
+  
+  <!-- CÓDIGO DE GOOGLE ADSENSE INTEGRADO -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8095981292018307"
+     crossorigin="anonymous"></script>
+
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .card { background: #1e293b; padding: 28px; border-radius: 16px; width: 100%; max-width: 440px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid #334155; }
+    h1 { font-size: 1.4rem; margin-top: 0; color: #38bdf8; }
+    p.sub { font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
+    label { display: block; font-size: 0.85rem; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; }
+    select, input { width: 100%; padding: 12px; margin-bottom: 16px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 1rem; }
+    button { width: 100%; padding: 14px; background: #0284c7; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:hover { background: #0369a1; }
+    .resultados { margin-top: 22px; background: #0f172a; padding: 16px; border-radius: 10px; border-left: 4px solid #38bdf8; display: none; }
+    .fila { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.95rem; }
+    .fila:last-child { border-bottom: none; }
+    .valor { font-weight: bold; color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🧱 Calculadora de Concreto</h1>
+    <p class="sub">Calcula materiales por volumen (incluye 5% de desperdicio estándar).</p>
+    
+    <label for="fc">Resistencia del Concreto (f'c):</label>
+    <select id="fc">
+      <option value="140">140 kg/cm² (Cimientos / Falsos pisos)</option>
+      <option value="175">175 kg/cm² (Sobrecimientos / Veredas)</option>
+      <option value="210" selected>210 kg/cm² (Columnas / Vigas / Losas)</option>
+      <option value="280">280 kg/cm² (Estructuras especiales)</option>
+    </select>
+
+    <label for="volumen">Volumen total (m³):</label>
+    <input type="number" id="volumen" placeholder="Ej. 2.5" step="0.01" min="0.01" value="1">
+
+    <button onclick="calcular()">Calcular Materiales</button>
+
+    <div class="resultados" id="resultados">
+      <div class="fila"><span>Cemento (bolsas 42.5 kg):</span> <span class="valor" id="res-cemento">-</span></div>
+      <div class="fila"><span>Arena gruesa (m³):</span> <span class="valor" id="res-arena">-</span></div>
+      <div class="fila"><span>Piedra chancada (m³):</span> <span class="valor" id="res-piedra">-</span></div>
+      <div class="fila"><span>Agua aprox. (litros):</span> <span class="valor" id="res-agua">-</span></div>
+    </div>
+  </div>
+
+  <script>
+    // Dosificaciones referenciales por m3 (sin desperdicio base)
+    const dosificaciones = {
+      140: { cemento: 7.01, arena: 0.51, piedra: 0.64, agua: 184 },
+      175: { cemento: 8.43, arena: 0.54, piedra: 0.55, agua: 185 },
+      210: { cemento: 9.73, arena: 0.52, piedra: 0.53, agua: 186 },
+      280: { cemento: 13.34, arena: 0.45, piedra: 0.51, agua: 189 }
+    };
+
+    function calcular() {
+      const fc = document.getElementById('fc').value;
+      const vol = parseFloat(document.getElementById('volumen').value);
+      if (!vol || vol <= 0) return alert("Ingresa un volumen válido en m³");
+
+      const factorDesperdicio = 1.05; // +5% estándar
+      const d = dosificaciones[fc];
+
+      document.getElementById('res-cemento').innerText = Math.ceil(d.cemento * vol * factorDesperdicio) + " bolsas";
+      document.getElementById('res-arena').innerText = (d.arena * vol * factorDesperdicio).toFixed(2) + " m³";
+      document.getElementById('res-piedra').innerText = (d.piedra * vol * factorDesperdicio).toFixed(2) + " m³";
+      document.getElementById('res-agua').innerText = Math.round(d.agua * vol * factorDesperdicio) + " L";
+
+      document.getElementById('resultados').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

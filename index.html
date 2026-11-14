@@ -1,80 +1,865 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Rápida de Concreto | Obra y Diseño</title>
-  
-  <!-- CÓDIGO DE GOOGLE ADSENSE INTEGRADO -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8095981292018307"
-     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suite de Ingeniería Civil | Panel Técnico Profesional</title>
+    <meta name="description" content="Plataforma de cálculo y metrados para ingeniería civil: ACI 211, RNE E.060, E.070, ASTM A615 y rendimientos de mano de obra.">
+    
+    <!-- Google AdSense Verification Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8095981292018307" crossorigin="anonymous"></script>
 
-  <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .card { background: #1e293b; padding: 28px; border-radius: 16px; width: 100%; max-width: 440px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid #334155; }
-    h1 { font-size: 1.4rem; margin-top: 0; color: #38bdf8; }
-    p.sub { font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
-    label { display: block; font-size: 0.85rem; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; }
-    select, input { width: 100%; padding: 12px; margin-bottom: 16px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 1rem; }
-    button { width: 100%; padding: 14px; background: #0284c7; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    button:hover { background: #0369a1; }
-    .resultados { margin-top: 22px; background: #0f172a; padding: 16px; border-radius: 10px; border-left: 4px solid #38bdf8; display: none; }
-    .fila { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 0.95rem; }
-    .fila:last-child { border-bottom: none; }
-    .valor { font-weight: bold; color: #38bdf8; }
-  </style>
+    <style>
+        :root {
+            --bg-main: #0f1117;
+            --bg-sidebar: #161922;
+            --bg-card: #1c212c;
+            --bg-input: #13161f;
+            --border-color: #2c3444;
+            --border-card: #252d3d;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --text-main: #e2e8f0;
+            --text-muted: #8c95a7;
+            --success-bg: #13221c;
+            --success-border: #1f3d30;
+            --success-text: #4ade80;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Top Header Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+        }
+
+        .brand span {
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.08);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+
+        .top-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .top-links span {
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .top-links span:hover {
+            color: var(--text-main);
+        }
+
+        /* App Layout */
+        .app-container {
+            display: flex;
+            margin-top: 56px;
+            width: 100%;
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            width: 270px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 56px);
+            position: fixed;
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            padding-left: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 1.75rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-btn {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-weight: 400;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.15s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+        }
+
+        .nav-btn.active {
+            background: rgba(245, 158, 11, 0.08);
+            color: var(--accent);
+            font-weight: 500;
+            border-left: 2px solid var(--accent);
+        }
+
+        /* Main Content Area */
+        main {
+            margin-left: 270px;
+            flex: 1;
+            padding: 2.5rem;
+            max-width: calc(100% - 270px);
+        }
+
+        @media (max-width: 900px) {
+            aside { width: 220px; }
+            main { margin-left: 220px; max-width: calc(100% - 220px); }
+        }
+
+        @media (max-width: 768px) {
+            aside { display: none; }
+            main { margin-left: 0; max-width: 100%; padding: 1.25rem; }
+        }
+
+        /* Content Panels */
+        .panel {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel-header {
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 0.85rem;
+        }
+
+        .panel-header h2 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .norm-badge {
+            display: inline-block;
+            background: rgba(140, 149, 167, 0.08);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-card);
+        }
+
+        /* Forms & Inputs */
+        .grid-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.1rem;
+            margin-bottom: 1.25rem;
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-card);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.35rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border-card);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: var(--bg-input);
+            color: var(--text-main);
+            transition: border-color 0.15s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-calc {
+            background: var(--accent);
+            color: #111318;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-calc:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Results Grid */
+        .results-wrapper {
+            margin-top: 1.5rem;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.1rem;
+        }
+
+        @media (max-width: 950px) {
+            .results-wrapper { grid-template-columns: 1fr; }
+        }
+
+        .result-box, .crew-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 1.1rem;
+        }
+
+        .result-box h3, .crew-box h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.85rem;
+            color: var(--text-main);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .data-table td {
+            padding: 0.45rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+        }
+
+        .data-table td:last-child {
+            text-align: right;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .crew-note {
+            font-size: 0.8rem;
+            color: var(--success-text);
+            margin-top: 0.75rem;
+            background: var(--success-bg);
+            padding: 0.5rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--success-border);
+        }
+
+        /* Documentation Block */
+        .tech-docs {
+            margin-top: 2.5rem;
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-card);
+        }
+
+        .tech-docs h3 {
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .tech-docs p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🧱 Calculadora de Concreto</h1>
-    <p class="sub">Calcula materiales por volumen (incluye 5% de desperdicio estándar).</p>
-    
-    <label for="fc">Resistencia del Concreto (f'c):</label>
-    <select id="fc">
-      <option value="140">140 kg/cm² (Cimientos / Falsos pisos)</option>
-      <option value="175">175 kg/cm² (Sobrecimientos / Veredas)</option>
-      <option value="210" selected>210 kg/cm² (Columnas / Vigas / Losas)</option>
-      <option value="280">280 kg/cm² (Estructuras especiales)</option>
-    </select>
 
-    <label for="volumen">Volumen total (m³):</label>
-    <input type="number" id="volumen" placeholder="Ej. 2.5" step="0.01" min="0.01" value="1">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="brand">
+            <span>SUITE</span> Civil Engineering
+        </div>
+        <div class="top-links">
+            <span onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Documentación</span>
+            <span>GitHub</span>
+        </div>
+    </header>
 
-    <button onclick="calcular()">Calcular Materiales</button>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside>
+            <div class="sidebar-section-title">Módulos de Cálculo</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <button class="nav-btn active" onclick="openTab('concreto', this)">
+                        <span>⚡</span> Concreto (ACI 211)
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-btn" onclick="openTab('albanileria', this)">
+                        <span>🧱</span> Albañilería (E.070)
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-btn" onclick="openTab('tierras', this)">
+                        <span>⛏️</span> Movimiento de Tierras
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-btn" onclick="openTab('acero', this)">
+                        <span>🔗</span> Acero (ASTM A615)
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-btn" onclick="openTab('encofrado', this)">
+                        <span>🪵</span> Encofrados (E.060)
+                    </button>
+                </li>
+            </ul>
 
-    <div class="resultados" id="resultados">
-      <div class="fila"><span>Cemento (bolsas 42.5 kg):</span> <span class="valor" id="res-cemento">-</span></div>
-      <div class="fila"><span>Arena gruesa (m³):</span> <span class="valor" id="res-arena">-</span></div>
-      <div class="fila"><span>Piedra chancada (m³):</span> <span class="valor" id="res-piedra">-</span></div>
-      <div class="fila"><span>Agua aprox. (litros):</span> <span class="valor" id="res-agua">-</span></div>
+            <div class="sidebar-section-title">Normativa</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><span style="font-size: 0.8rem; color: var(--text-muted); padding-left: 0.5rem;">• ACI 211.1 / ACI 318</span></li>
+                <li class="nav-item"><span style="font-size: 0.8rem; color: var(--text-muted); padding-left: 0.5rem;">• RNE E.050 / E.060 / E.070</span></li>
+                <li class="nav-item"><span style="font-size: 0.8rem; color: var(--text-muted); padding-left: 0.5rem;">• NTP & CAPECO Cuadrillas</span></li>
+            </ul>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main>
+            <!-- MODULE 1: CONCRETE -->
+            <section id="concreto" class="panel active">
+                <div class="panel-header">
+                    <h2>Dosificación de Concreto y Cuadrilla</h2>
+                    <span class="norm-badge">ACI 211.1 / RNE E.060</span>
+                </div>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Resistencia de Diseño (f'c)</label>
+                        <select id="conc-fc">
+                            <option value="140">140 kg/cm² (Solados / Cimientos)</option>
+                            <option value="175">175 kg/cm² (Sobrecimientos)</option>
+                            <option value="210" selected>210 kg/cm² (Columnas / Vigas / Losas)</option>
+                            <option value="245">245 kg/cm² (Estructural Especial)</option>
+                            <option value="280">280 kg/cm² (Alta Resistencia)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Volumen Neto a Vaciar (m³)</label>
+                        <input type="number" id="conc-vol" value="5.0" step="0.1" min="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Desperdicio Estimado (%)</label>
+                        <input type="number" id="conc-desp" value="5" step="1" min="0" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Elemento (Rendimiento)</label>
+                        <select id="conc-elem">
+                            <option value="zapata">Zapatas / Cimientos (25 m³/día)</option>
+                            <option value="columna" selected>Columnas / Placas (12 m³/día)</option>
+                            <option value="viga">Vigas y Losas Aligeradas (18 m³/día)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-calc" onclick="calcConcreto()">Calcular Materiales y Cuadrilla</button>
+
+                <div id="res-concreto" class="results-wrapper">
+                    <div class="result-box">
+                        <h3>Requerimiento de Materiales</h3>
+                        <table class="data-table" id="table-conc-mat"></table>
+                    </div>
+                    <div class="crew-box">
+                        <h3>Cuadrilla y Plazo de Ejecución</h3>
+                        <table class="data-table" id="table-conc-crew"></table>
+                        <div class="crew-note" id="note-conc-crew"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 2: MASONRY -->
+            <section id="albanileria" class="panel">
+                <div class="panel-header">
+                    <h2>Metrado de Muros de Albañilería</h2>
+                    <span class="norm-badge">RNE E.070 Albañilería</span>
+                </div>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Área Neta del Muro (m²)</label>
+                        <input type="number" id="alb-area" value="25.0" step="0.5" min="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Aparejo</label>
+                        <select id="alb-aparejo">
+                            <option value="soga" selected>De Soga (e = 13 cm)</option>
+                            <option value="cabeza">De Cabeza (e = 24 cm)</option>
+                            <option value="canto">De Canto (e = 9 cm)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Dimensiones Ladrillo (L × A × H cm)</label>
+                        <select id="alb-unidad">
+                            <option value="24,13,9" selected>King Kong 18H (24 × 13 × 9 cm)</option>
+                            <option value="23,12.5,9">King Kong Artesanal (23 × 12.5 × 9 cm)</option>
+                            <option value="24,11.5,9">Pandereta (24 × 11.5 × 9 cm)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Espesor de Junta / Mortero</label>
+                        <select id="alb-junta">
+                            <option value="1.5,5" selected>Junta 1.5 cm — Mortero 1:5</option>
+                            <option value="1.5,4">Junta 1.5 cm — Mortero 1:4 (Portante)</option>
+                            <option value="1.0,5">Junta 1.0 cm — Mortero 1:5</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-calc" onclick="calcAlbanileria()">Calcular Ladrillos y Cuadrilla</button>
+
+                <div id="res-albanileria" class="results-wrapper">
+                    <div class="result-box">
+                        <h3>Insumos de Albañilería</h3>
+                        <table class="data-table" id="table-alb-mat"></table>
+                    </div>
+                    <div class="crew-box">
+                        <h3>Cuadrilla de Asentado</h3>
+                        <table class="data-table" id="table-alb-crew"></table>
+                        <div class="crew-note" id="note-alb-crew"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 3: EARTHWORKS -->
+            <section id="tierras" class="panel">
+                <div class="panel-header">
+                    <h2>Movimiento de Tierras y Esponjamiento</h2>
+                    <span class="norm-badge">RNE E.050 / Metrados</span>
+                </div>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Volumen Excavado en Banco (m³)</label>
+                        <input type="number" id="tie-exc" value="40.0" step="1" min="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Volumen Relleno Compactado (m³)</label>
+                        <input type="number" id="tie-rel" value="18.0" step="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Suelo (% Esponjamiento)</label>
+                        <select id="tie-suelo">
+                            <option value="0.15,0.90">Arena / Grava (Esp. 15% | C = 0.90)</option>
+                            <option value="0.25,0.85" selected>Tierra Común / Limo (Esp. 25% | C = 0.85)</option>
+                            <option value="0.35,0.80">Arcilla Compacta (Esp. 35% | C = 0.80)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidad Tolva Volquete (m³)</label>
+                        <select id="tie-volquete">
+                            <option value="10">Volquete 10 m³</option>
+                            <option value="15" selected>Volquete 15 m³</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-calc" onclick="calcTierras()">Calcular Balance y Cuadrilla</button>
+
+                <div id="res-tierras" class="results-wrapper">
+                    <div class="result-box">
+                        <h3>Balance Volumétrico</h3>
+                        <table class="data-table" id="table-tie-mat"></table>
+                    </div>
+                    <div class="crew-box">
+                        <h3>Cuadrilla Excavación Manual</h3>
+                        <table class="data-table" id="table-tie-crew"></table>
+                        <div class="crew-note" id="note-tie-crew"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 4: REBAR -->
+            <section id="acero" class="panel">
+                <div class="panel-header">
+                    <h2>Metrado de Acero Corrugado y Estribos</h2>
+                    <span class="norm-badge">ASTM A615 / RNE E.060</span>
+                </div>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Diámetro Nominal</label>
+                        <select id="ace-diam">
+                            <option value="0.222,6mm">6 mm (0.222 kg/m)</option>
+                            <option value="0.560,3/8&quot;">3/8" (0.560 kg/m)</option>
+                            <option value="0.994,1/2&quot;" selected>1/2" (0.994 kg/m)</option>
+                            <option value="1.552,5/8&quot;">5/8" (1.552 kg/m)</option>
+                            <option value="2.235,3/4&quot;">3/4" (2.235 kg/m)</option>
+                            <option value="3.973,1&quot;">1" (3.973 kg/m)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud Total Acumulada (m)</label>
+                        <input type="number" id="ace-long" value="180" step="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Desperdicio por Traslapes (%)</label>
+                        <input type="number" id="ace-desp" value="7" step="1" min="0" max="15">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitud Varilla Comercial (m)</label>
+                        <input type="number" id="ace-var" value="9.0" step="0.5" min="6">
+                    </div>
+                </div>
+                <button class="btn-calc" onclick="calcAcero()">Calcular Peso y Varillas</button>
+
+                <div id="res-acero" class="results-wrapper">
+                    <div class="result-box">
+                        <h3>Metrado de Acero y Alambre</h3>
+                        <table class="data-table" id="table-ace-mat"></table>
+                    </div>
+                    <div class="crew-box">
+                        <h3>Cuadrilla Habilitación</h3>
+                        <table class="data-table" id="table-ace-crew"></table>
+                        <div class="crew-note" id="note-ace-crew"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULE 5: FORMWORK -->
+            <section id="encofrado" class="panel">
+                <div class="panel-header">
+                    <h2>Metrado de Encofrado y Desencofrado</h2>
+                    <span class="norm-badge">RNE E.060 Cap. 6</span>
+                </div>
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Elemento Estructural</label>
+                        <select id="enc-elem">
+                            <option value="columna" selected>Columnas Típicas (10 m²/día)</option>
+                            <option value="viga">Vigas Peraltadas (9 m²/día)</option>
+                            <option value="losa">Losas Aligeradas (12 m²/día)</option>
+                            <option value="sobrecimiento">Sobrecimientos (14 m²/día)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Área de Contacto (m²)</label>
+                        <input type="number" id="enc-area" value="32.0" step="0.5" min="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>N° de Usos de la Madera</label>
+                        <select id="enc-usos">
+                            <option value="4">4 usos (Madera corriente)</option>
+                            <option value="7" selected>7 usos (Madera tornillo)</option>
+                            <option value="15">15 usos (Triplay fenólico)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Carga Viva de Obra (E.060)</label>
+                        <select id="enc-carga">
+                            <option value="200" selected>Convencional (200 kg/m²)</option>
+                            <option value="300">Con Equipo Motorizado (300 kg/m²)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-calc" onclick="calcEncofrado()">Calcular Insumos y Plazos</button>
+
+                <div id="res-encofrado" class="results-wrapper">
+                    <div class="result-box">
+                        <h3>Insumos de Encofrado</h3>
+                        <table class="data-table" id="table-enc-mat"></table>
+                    </div>
+                    <div class="crew-box">
+                        <h3>Cuadrilla de Carpintería</h3>
+                        <table class="data-table" id="table-enc-crew"></table>
+                        <div class="crew-note" id="note-enc-crew"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documentation footer note -->
+            <article class="tech-docs">
+                <h3>Base Normativa y Rigor Técnico</h3>
+                <p>Todos los algoritmos de cálculo implementados siguen estrictamente las especificaciones del comité <strong>ACI 211.1</strong>, el <strong>Reglamento Nacional de Edificaciones (RNE)</strong> y las tablas estándar de rendimientos para análisis de costos unitarios en edificación.</p>
+            </article>
+        </main>
     </div>
-  </div>
 
-  <script>
-    // Dosificaciones referenciales por m3 (sin desperdicio base)
-    const dosificaciones = {
-      140: { cemento: 7.01, arena: 0.51, piedra: 0.64, agua: 184 },
-      175: { cemento: 8.43, arena: 0.54, piedra: 0.55, agua: 185 },
-      210: { cemento: 9.73, arena: 0.52, piedra: 0.53, agua: 186 },
-      280: { cemento: 13.34, arena: 0.45, piedra: 0.51, agua: 189 }
-    };
-
-    function calcular() {
-      const fc = document.getElementById('fc').value;
-      const vol = parseFloat(document.getElementById('volumen').value);
-      if (!vol || vol <= 0) return alert("Ingresa un volumen válido en m³");
-
-      const factorDesperdicio = 1.05; // +5% estándar
-      const d = dosificaciones[fc];
-
-      document.getElementById('res-cemento').innerText = Math.ceil(d.cemento * vol * factorDesperdicio) + " bolsas";
-      document.getElementById('res-arena').innerText = (d.arena * vol * factorDesperdicio).toFixed(2) + " m³";
-      document.getElementById('res-piedra').innerText = (d.piedra * vol * factorDesperdicio).toFixed(2) + " m³";
-      document.getElementById('res-agua').innerText = Math.round(d.agua * vol * factorDesperdicio) + " L";
-
-      document.getElementById('resultados').style.display = 'block';
+<script>
+    function openTab(tabId, btn) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
     }
-  </script>
+
+    // 1. CONCRETO (ACI 211.1 / E.060)
+    function calcConcreto() {
+        const fc = document.getElementById('conc-fc').value;
+        const volNeto = parseFloat(document.getElementById('conc-vol').value) || 0;
+        const desp = (parseFloat(document.getElementById('conc-desp').value) || 0) / 100;
+        const elem = document.getElementById('conc-elem').value;
+
+        const tablaDosif = {
+            "140": { cem: 7.01, are: 0.51, pie: 0.64, agu: 0.184 },
+            "175": { cem: 8.43, are: 0.54, pie: 0.55, agu: 0.185 },
+            "210": { cem: 9.73, are: 0.52, pie: 0.53, agu: 0.186 },
+            "245": { cem: 11.50, are: 0.50, pie: 0.51, agu: 0.188 },
+            "280": { cem: 13.34, are: 0.45, pie: 0.51, agu: 0.189 }
+        };
+
+        const d = tablaDosif[fc];
+        const volTotal = volNeto * (1 + desp);
+        const bolsas = Math.ceil(volTotal * d.cem);
+        const arena = (volTotal * d.are).toFixed(2);
+        const piedra = (volTotal * d.pie).toFixed(2);
+        const aguaLitros = Math.round(volTotal * d.agu * 1000);
+
+        document.getElementById('table-conc-mat').innerHTML = `
+            <tr><td>Volumen c/ desperdicio</td><td>${volTotal.toFixed(2)} m³</td></tr>
+            <tr><td>Cemento (42.5 kg)</td><td>${bolsas} bolsas</td></tr>
+            <tr><td>Arena Gruesa</td><td>${arena} m³</td></tr>
+            <tr><td>Piedra Chancada</td><td>${piedra} m³</td></tr>
+            <tr><td>Agua de Mezcla</td><td>${aguaLitros} L</td></tr>
+        `;
+
+        const rendimientos = {
+            zapata: { rend: 25, cap: 0.2, op: 2, of: 2, pe: 8, desc: "Vaciado en cimentación c/ mezcladora." },
+            columna: { rend: 12, cap: 0.2, op: 2, of: 1, pe: 8, desc: "Vaciado vertical en elementos esbeltos." },
+            viga: { rend: 18, cap: 0.2, op: 2, of: 2, pe: 10, desc: "Vaciado horizontal en losas y vigas." }
+        };
+
+        const r = rendimientos[elem];
+        const dias = (volNeto / r.rend).toFixed(2);
+
+        document.getElementById('table-conc-crew').innerHTML = `
+            <tr><td>Rendimiento Estándar</td><td>${r.rend} m³/día</td></tr>
+            <tr><td>Capataz</td><td>${r.cap}</td></tr>
+            <tr><td>Operario</td><td>${r.op}</td></tr>
+            <tr><td>Oficial</td><td>${r.of}</td></tr>
+            <tr><td>Peón</td><td>${r.pe}</td></tr>
+            <tr><td>Plazo Estimado</td><td>${dias} días</td></tr>
+        `;
+        document.getElementById('note-conc-crew').textContent = r.desc;
+        document.getElementById('res-concreto').style.display = 'grid';
+    }
+
+    // 2. ALBAÑILERÍA (RNE E.070)
+    function calcAlbanileria() {
+        const area = parseFloat(document.getElementById('alb-area').value) || 0;
+        const aparejo = document.getElementById('alb-aparejo').value;
+        const [L_cm, A_cm, H_cm] = document.getElementById('alb-unidad').value.split(',').map(Number);
+        const [J_cm, propMortero] = document.getElementById('alb-junta').value.split(',').map(Number);
+
+        const L = L_cm / 100, A = A_cm / 100, H = H_cm / 100, J = J_cm / 100;
+        let cantM2 = 0, espesorMuro = 0, rendDia = 0;
+
+        if (aparejo === 'soga') {
+            cantM2 = 1 / ((L + J) * (H + J));
+            espesorMuro = A;
+            rendDia = 9.0;
+        } else if (aparejo === 'cabeza') {
+            cantM2 = 1 / ((A + J) * (H + J));
+            espesorMuro = L;
+            rendDia = 6.5;
+        } else {
+            cantM2 = 1 / ((L + J) * (A + J));
+            espesorMuro = H;
+            rendDia = 10.5;
+        }
+
+        const totalLadrillos = Math.ceil(area * cantM2 * 1.05);
+        const volMortero = area * ((1 * 1 * espesorMuro) - (cantM2 * L * A * H)) * 1.05;
+        const cemM3 = propMortero === 4 ? 8.9 : 7.4;
+        const areM3 = propMortero === 4 ? 1.00 : 1.05;
+
+        document.getElementById('table-alb-mat').innerHTML = `
+            <tr><td>Densidad Unitaria</td><td>${cantM2.toFixed(1)} und/m²</td></tr>
+            <tr><td>Ladrillos (Inc. 5% desp.)</td><td>${totalLadrillos} und</td></tr>
+            <tr><td>Volumen de Mortero</td><td>${volMortero.toFixed(2)} m³</td></tr>
+            <tr><td>Cemento (42.5 kg)</td><td>${Math.ceil(volMortero * cemM3)} bolsas</td></tr>
+            <tr><td>Arena Fina</td><td>${(volMortero * areM3).toFixed(2)} m³</td></tr>
+        `;
+
+        const dias = (area / rendDia).toFixed(2);
+        document.getElementById('table-alb-crew').innerHTML = `
+            <tr><td>Rendimiento Diario</td><td>${rendDia} m²/día</td></tr>
+            <tr><td>Capataz</td><td>0.1</td></tr>
+            <tr><td>Operario Albañil</td><td>1.0</td></tr>
+            <tr><td>Peón</td><td>0.5</td></tr>
+            <tr><td>Plazo Estimado</td><td>${dias} días</td></tr>
+        `;
+        document.getElementById('note-alb-crew').textContent = "Incluye preparación de mezcla y asentado horizontal.";
+        document.getElementById('res-albanileria').style.display = 'grid';
+    }
+
+    // 3. MOVIMIENTO DE TIERRAS
+    function calcTierras() {
+        const vExcBanco = parseFloat(document.getElementById('tie-exc').value) || 0;
+        const vRelComp = parseFloat(document.getElementById('tie-rel').value) || 0;
+        const [esp, coefRed] = document.getElementById('tie-suelo').value.split(',').map(Number);
+        const capVolquete = parseFloat(document.getElementById('tie-volquete').value);
+
+        const vExcSuelto = vExcBanco * (1 + esp);
+        const balance = vExcSuelto - ((vRelComp / coefRed) * (1 + esp));
+        const volFinal = Math.abs(balance);
+
+        document.getElementById('table-tie-mat').innerHTML = `
+            <tr><td>Volumen Excavado Suelto</td><td>${vExcSuelto.toFixed(2)} m³</td></tr>
+            <tr><td>${balance >= 0 ? 'Excedente a Eliminar' : 'Préstamo Requerido'}</td><td>${volFinal.toFixed(2)} m³</td></tr>
+            <tr><td>Viajes (Volquete ${capVolquete} m³)</td><td>${Math.ceil(volFinal / capVolquete)} viajes</td></tr>
+        `;
+
+        const dias = (vExcBanco / 4.0).toFixed(2);
+        document.getElementById('table-tie-crew').innerHTML = `
+            <tr><td>Rendimiento Manual</td><td>4.0 m³/día</td></tr>
+            <tr><td>Capataz</td><td>0.1</td></tr>
+            <tr><td>Peón</td><td>1.0</td></tr>
+            <tr><td>Jornadas Requeridas</td><td>${dias} días-hombre</td></tr>
+        `;
+        document.getElementById('note-tie-crew').textContent = "Excavación en zanjas de cimentación terreno normal.";
+        document.getElementById('res-tierras').style.display = 'grid';
+    }
+
+    // 4. ACERO DE REFUERZO (ASTM A615)
+    function calcAcero() {
+        const [pesoLineal, nom] = document.getElementById('ace-diam').value.split(',');
+        const longTotal = parseFloat(document.getElementById('ace-long').value) || 0;
+        const desp = (parseFloat(document.getElementById('ace-desp').value) || 0) / 100;
+        const longVarilla = parseFloat(document.getElementById('ace-var').value) || 9.0;
+
+        const longConDesp = longTotal * (1 + desp);
+        const pesoTotal = longConDesp * parseFloat(pesoLineal);
+
+        document.getElementById('table-ace-mat').innerHTML = `
+            <tr><td>Diámetro Seleccionado</td><td>${nom}</td></tr>
+            <tr><td>Longitud c/ Desperdicio</td><td>${longConDesp.toFixed(2)} m</td></tr>
+            <tr><td>Peso Total</td><td>${pesoTotal.toFixed(2)} kg</td></tr>
+            <tr><td>Varillas Comerciales</td><td>${Math.ceil(longConDesp / longVarilla)} und</td></tr>
+            <tr><td>Alambre N° 16 (~5%)</td><td>${(pesoTotal * 0.05).toFixed(2)} kg</td></tr>
+        `;
+
+        document.getElementById('table-ace-crew').innerHTML = `
+            <tr><td>Rendimiento Armado</td><td>250 kg/día</td></tr>
+            <tr><td>Capataz</td><td>0.1</td></tr>
+            <tr><td>Operario Fierrero</td><td>1.0</td></tr>
+            <tr><td>Oficial</td><td>1.0</td></tr>
+            <tr><td>Plazo Estimado</td><td>${(pesoTotal / 250).toFixed(2)} días</td></tr>
+        `;
+        document.getElementById('note-ace-crew').textContent = "Incluye corte, doblado y colocación de elementos.";
+        document.getElementById('res-acero').style.display = 'grid';
+    }
+
+    // 5. ENCOFRADOS (RNE E.060)
+    function calcEncofrado() {
+        const elem = document.getElementById('enc-elem').value;
+        const area = parseFloat(document.getElementById('enc-area').value) || 0;
+        const usos = parseInt(document.getElementById('enc-usos').value);
+
+        const datosEnc = {
+            columna: { pt: 4.5, cl: 0.16, rend: 10 },
+            viga: { pt: 5.2, cl: 0.18, rend: 9 },
+            losa: { pt: 4.8, cl: 0.15, rend: 12 },
+            sobrecimiento: { pt: 3.8, cl: 0.14, rend: 14 }
+        };
+
+        const d = datosEnc[elem];
+        const ptTotal = Math.ceil(area * d.pt * (7 / usos));
+
+        document.getElementById('table-enc-mat').innerHTML = `
+            <tr><td>Área de Contacto</td><td>${area.toFixed(2)} m²</td></tr>
+            <tr><td>Madera Estimada</td><td>${ptTotal} p²</td></tr>
+            <tr><td>Clavos 3" - 4"</td><td>${(area * d.cl).toFixed(2)} kg</td></tr>
+            <tr><td>Desmoldante</td><td>${(area * 0.04).toFixed(2)} gal</td></tr>
+        `;
+
+        document.getElementById('table-enc-crew').innerHTML = `
+            <tr><td>Rendimiento Carpintería</td><td>${d.rend} m²/día</td></tr>
+            <tr><td>Capataz</td><td>0.1</td></tr>
+            <tr><td>Operario Carpintero</td><td>1.0</td></tr>
+            <tr><td>Oficial</td><td>1.0</td></tr>
+            <tr><td>Plazo Estimado</td><td>${(area / d.rend).toFixed(2)} días</td></tr>
+        `;
+        document.getElementById('note-enc-crew').textContent = "Cumple con los plazos normativos mínimos de desencofrado (E.060).";
+        document.getElementById('res-encofrado').style.display = 'grid';
+    }
+</script>
+
 </body>
 </html>

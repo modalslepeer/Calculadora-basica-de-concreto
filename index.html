@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suite de Ingeniería Civil</title>
-    <meta name="description" content="Plataforma técnica de cálculo y metrados para ingeniería civil bajo normas ACI y RNE.">
-    
+    <title>Suite de Ingeniería Civil — Metrados, Dosificación y Rendimientos</title>
+    <meta name="description" content="Herramienta técnica y guía de consulta para cálculo de concreto, albañilería, movimiento de tierras, acero de refuerzo y encofrados bajo normas ACI y RNE.">
+
     <!-- Google AdSense Verification Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8095981292018307" crossorigin="anonymous"></script>
 
@@ -35,7 +35,6 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            display: flex;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -76,6 +75,7 @@
         .app-container {
             display: flex;
             margin-top: 52px;
+            min-height: calc(100vh - 52px);
             width: 100%;
         }
 
@@ -89,6 +89,7 @@
             overflow-y: auto;
             padding: 1.25rem 0.75rem;
             transition: all 0.3s ease;
+            z-index: 95;
         }
 
         .sidebar-title {
@@ -138,13 +139,19 @@
             border-left: 2px solid var(--accent);
         }
 
-        /* Main Content Area */
-        main {
+        /* Right Column (Main + Footer) */
+        .content-column {
             margin-left: 250px;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        main {
+            flex: 1;
             padding: 2rem;
-            max-width: calc(100% - 250px);
-            transition: margin 0.3s ease;
+            max-width: 100%;
         }
 
         /* Responsive adjustments for Mobile */
@@ -170,10 +177,10 @@
                 flex-direction: row;
                 margin-bottom: 0;
                 gap: 0.5rem;
-                width: 100%;
+                width: auto;
             }
             .nav-btn {
-                padding: 0.4rem 0.6rem;
+                padding: 0.4rem 0.65rem;
                 font-size: 0.8rem;
                 border-left: none !important;
                 border-bottom: 2px solid transparent;
@@ -183,10 +190,11 @@
                 border-bottom: 2px solid var(--accent);
                 background: rgba(245, 158, 11, 0.07);
             }
-            main {
+            .content-column {
                 margin-left: 0;
-                margin-top: 55px;
-                max-width: 100%;
+                margin-top: 46px;
+            }
+            main {
                 padding: 1rem;
             }
         }
@@ -226,7 +234,7 @@
             font-size: 0.72rem;
             color: var(--text-muted);
             background: rgba(255, 255, 255, 0.03);
-            padding: 0.15rem 0.4rem;
+            padding: 0.2rem 0.45rem;
             border-radius: 4px;
             border: 1px solid var(--border-color);
         }
@@ -234,15 +242,15 @@
         .reading-box {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 1rem;
+            padding: 1rem 1.15rem;
             border-radius: 6px;
             margin-bottom: 1.25rem;
         }
 
         .reading-box p {
-            font-size: 0.83rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
         .grid-form {
@@ -288,7 +296,7 @@
             font-weight: 600;
             font-size: 0.85rem;
             border: none;
-            padding: 0.6rem 1.25rem;
+            padding: 0.65rem 1.3rem;
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.15s;
@@ -309,29 +317,29 @@
             .results-wrapper { grid-template-columns: 1fr; }
         }
 
-        .result-box, .crew-box {
+        .result-box, .crew-box, .guide-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 1rem;
+            padding: 1.15rem;
         }
 
         .result-box h3, .crew-box h3 {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             margin-bottom: 0.75rem;
             color: var(--text-main);
             font-weight: 600;
         }
 
-        .data-table {
+        .data-table, .ref-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
         }
 
         .data-table td {
-            padding: 0.4rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 0.42rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             color: var(--text-muted);
         }
 
@@ -345,14 +353,108 @@
             border-bottom: none;
         }
 
+        .ref-table th, .ref-table td {
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .ref-table th {
+            color: var(--text-main);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .ref-table td {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
         .crew-note {
             font-size: 0.78rem;
             color: var(--success-text);
-            margin-top: 0.6rem;
+            margin-top: 0.65rem;
             background: var(--success-bg);
-            padding: 0.4rem 0.5rem;
+            padding: 0.45rem 0.6rem;
             border-radius: 4px;
             border: 1px solid var(--success-border);
+        }
+
+        /* Technical Guide & Editorial Sections */
+        .guide-section {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .guide-card h3 {
+            font-size: 0.98rem;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        .guide-card h4 {
+            font-size: 0.86rem;
+            color: var(--accent);
+            margin-top: 0.85rem;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+        }
+
+        .guide-card p, .guide-card li {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .guide-card ul {
+            padding-left: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .example-box {
+            background: var(--bg-input);
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem 0.9rem;
+            border-radius: 0 5px 5px 0;
+            margin-top: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-sidebar);
+            border-top: 1px solid var(--border-color);
+            padding: 1.25rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
         }
     </style>
 </head>
@@ -360,8 +462,8 @@
 
     <!-- Top Header Bar -->
     <header class="top-bar">
-        <div class="brand">SUITE <span>Civil Engineering</span></div>
-        <div class="top-links">CNS's Proyect</div>
+        <div class="brand"> INA <span>Civil Engineering</span></div>
+        <div class="top-links">Cálculo, Metrados y Rendimientos de Obra - CNS'SS Proyect</div>
     </header>
 
     <div class="app-container">
@@ -377,276 +479,559 @@
             </ul>
         </aside>
 
-        <!-- Main Workspace -->
-        <main>
-            <!-- MODULE 1: CONCRETE -->
-            <section id="concreto" class="panel active">
-                <div class="panel-header">
-                    <h2>Dosificación de Concreto</h2>
-                    <span class="norm-badge">ACI 211.1 / RNE E.060</span>
-                </div>
+        <!-- Right Column -->
+        <div class="content-column">
+            <main>
+                <!-- MODULE 1: CONCRETE -->
+                <section id="concreto" class="panel active">
+                    <div class="panel-header">
+                        <h2>Dosificación de Concreto</h2>
+                        <span class="norm-badge">ACI 211.1 / RNE E.060</span>
+                    </div>
 
-                <div class="reading-box">
-                    <p><strong>Criterio Técnico:</strong> El diseño de mezclas bajo el estándar ACI 211.1 calcula las proporciones por volumen absoluto de los componentes (cemento, agua, aire, arena y piedra) garantizando la resistencia a compresión especificada.</p>
-                </div>
+                    <div class="reading-box">
+                        <p><strong>Criterio Técnico:</strong> La dosificación de concreto bajo lineamientos del ACI 211.1 y la Norma Técnica E.060 define las proporciones de cemento, agregados y agua necesarias para alcanzar la resistencia especificada a compresión (f'c) a los 28 días, manteniendo trabajabilidad y durabilidad acorde al elemento estructural.</p>
+                    </div>
 
-                <div class="grid-form">
-                    <div class="form-group">
-                        <label>Resistencia f'c (kg/cm²)</label>
-                        <select id="conc-fc">
-                            <option value="140">140 - Solados / Cimientos</option>
-                            <option value="175">175 - Sobrecimientos</option>
-                            <option value="210" selected>210 - Columnas / Vigas / Losas</option>
-                            <option value="245">245 - Estructural Especial</option>
-                            <option value="280">280 - Alta Resistencia</option>
-                        </select>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Resistencia f'c (kg/cm²)</label>
+                            <select id="conc-fc">
+                                <option value="140">140 - Solados / Cimientos</option>
+                                <option value="175">175 - Sobrecimientos</option>
+                                <option value="210" selected>210 - Columnas / Vigas / Losas</option>
+                                <option value="245">245 - Estructural Especial</option>
+                                <option value="280">280 - Alta Resistencia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Volumen Neto (m³)</label>
+                            <input type="number" id="conc-vol" value="5.0" step="0.1" min="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Desperdicio (%)</label>
+                            <input type="number" id="conc-desp" value="5" step="1" min="0" max="20">
+                        </div>
+                        <div class="form-group">
+                            <label>Elemento (Rendimiento)</label>
+                            <select id="conc-elem">
+                                <option value="zapata">Zapatas / Cimientos (25 m³/día)</option>
+                                <option value="columna" selected>Columnas / Placas (12 m³/día)</option>
+                                <option value="viga">Vigas y Losas (18 m³/día)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Volumen Neto (m³)</label>
-                        <input type="number" id="conc-vol" value="5.0" step="0.1" min="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label>Desperdicio (%)</label>
-                        <input type="number" id="conc-desp" value="5" step="1" min="0" max="20">
-                    </div>
-                    <div class="form-group">
-                        <label>Elemento (Rendimiento)</label>
-                        <select id="conc-elem">
-                            <option value="zapata">Zapatas / Cimientos (25 m³/día)</option>
-                            <option value="columna" selected>Columnas / Placas (12 m³/día)</option>
-                            <option value="viga">Vigas y Losas (18 m³/día)</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-calc" onclick="calcConcreto()">Calcular Materiales</button>
+                    <button class="btn-calc" onclick="calcConcreto()">Calcular Materiales</button>
 
-                <div id="res-concreto" class="results-wrapper">
-                    <div class="result-box">
-                        <h3>Materiales Requeridos</h3>
-                        <table class="data-table" id="table-conc-mat"></table>
+                    <div id="res-concreto" class="results-wrapper">
+                        <div class="result-box">
+                            <h3>Materiales Requeridos</h3>
+                            <table class="data-table" id="table-conc-mat"></table>
+                        </div>
+                        <div class="crew-box">
+                            <h3>Cuadrilla y Plazo</h3>
+                            <table class="data-table" id="table-conc-crew"></table>
+                            <div class="crew-note" id="note-conc-crew"></div>
+                        </div>
                     </div>
-                    <div class="crew-box">
-                        <h3>Cuadrilla y Plazo</h3>
-                        <table class="data-table" id="table-conc-crew"></table>
-                        <div class="crew-note" id="note-conc-crew"></div>
-                    </div>
-                </div>
-            </section>
 
-            <!-- MODULE 2: MASONRY -->
-            <section id="albanileria" class="panel">
-                <div class="panel-header">
-                    <h2>Metrado de Albañilería</h2>
-                    <span class="norm-badge">RNE E.070</span>
-                </div>
+                    <div class="guide-section">
+                        <div class="guide-card">
+                            <h3>Guía Técnica de Dosificación y Vaciado</h3>
+                            <p>En obra, el cálculo de materiales parte del volumen geométrico neto del elemento estructural al cual se le suma un porcentaje de desperdicio por transporte interno, rebose en encofrados y adherencia en mezcladora o canaletas. El agua total de mezcla debe ajustarse considerando la humedad superficial y absorción de los agregados.</p>
 
-                <div class="reading-box">
-                    <p><strong>Criterio Técnico:</strong> La Norma E.070 regula muros portantes y no portantes. El cálculo determina el número de unidades y volumen de mortero por metro cuadrado según el tipo de aparejo (soga, cabeza o canto).</p>
-                </div>
+                            <h4>Valores Referenciales por Metro Cúbico de Concreto</h4>
+                            <table class="ref-table">
+                                <thead>
+                                    <tr>
+                                        <th>f'c (kg/cm²)</th>
+                                        <th>Cemento (bls/m³)</th>
+                                        <th>Arena Gruesa (m³)</th>
+                                        <th>Piedra Chancada (m³)</th>
+                                        <th>Uso Típico</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>140</td>
+                                        <td>7.01</td>
+                                        <td>0.51</td>
+                                        <td>0.64</td>
+                                        <td>Solados, cimientos corridos y pisos simples</td>
+                                    </tr>
+                                    <tr>
+                                        <td>175</td>
+                                        <td>8.43</td>
+                                        <td>0.54</td>
+                                        <td>0.55</td>
+                                        <td>Sobrecimientos y elementos de baja solicitación</td>
+                                    </tr>
+                                    <tr>
+                                        <td>210</td>
+                                        <td>9.73</td>
+                                        <td>0.52</td>
+                                        <td>0.53</td>
+                                        <td>Columnas, vigas, zapatas y losas estructurales</td>
+                                    </tr>
+                                    <tr>
+                                        <td>280</td>
+                                        <td>13.34</td>
+                                        <td>0.45</td>
+                                        <td>0.51</td>
+                                        <td>Elementos de mayor exigencia estructural o exposición</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                <div class="grid-form">
-                    <div class="form-group">
-                        <label>Área Neta del Muro (m²)</label>
-                        <input type="number" id="alb-area" value="25.0" step="0.5" min="0.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Aparejo</label>
-                        <select id="alb-aparejo">
-                            <option value="soga" selected>Soga (e = 13 cm)</option>
-                            <option value="cabeza">Cabeza (e = 24 cm)</option>
-                            <option value="canto">Canto (e = 9 cm)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Unidad de Albañilería</label>
-                        <select id="alb-unidad">
-                            <option value="24,13,9" selected>King Kong 18H (24x13x9 cm)</option>
-                            <option value="23,12.5,9">King Kong Artesanal (23x12.5x9 cm)</option>
-                            <option value="24,11.5,9">Pandereta (24x11.5x9 cm)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Junta y Mortero</label>
-                        <select id="alb-junta">
-                            <option value="1.5,5" selected>Junta 1.5 cm — Mortero 1:5</option>
-                            <option value="1.5,4">Junta 1.5 cm — Mortero 1:4</option>
-                            <option value="1.0,5">Junta 1.0 cm — Mortero 1:5</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-calc" onclick="calcAlbanileria()">Calcular Insumos</button>
+                            <h4>Ejemplo Práctico Resuelto</h4>
+                            <div class="example-box">
+                                Para vaciar <strong>5.00 m³</strong> de concreto <strong>f'c = 210 kg/cm²</strong> en columnas con un <strong>5%</strong> de desperdicio: el volumen ajustado es <code>5.00 × 1.05 = 5.25 m³</code>. Aplicando la referencia de 9.73 bolsas de cemento (42.5 kg) por m³, se requieren <code>5.25 × 9.73 = 51.08</code>, redondeando a <strong>52 bolsas</strong>, junto con sus volúmenes proporcionales de arena gruesa, piedra chancada y agua.
+                            </div>
 
-                <div id="res-albanileria" class="results-wrapper">
-                    <div class="result-box">
-                        <h3>Insumos de Albañilería</h3>
-                        <table class="data-table" id="table-alb-mat"></table>
+                            <h4>Buenas Prácticas en Obra</h4>
+                            <ul>
+                                <li>Evitar añadir agua adicional en obra sin control de relación agua/cemento, ya que reduce la resistencia final y aumenta la fisuración por retracción.</li>
+                                <li>Consolidar el concreto mediante vibrado mecánico uniforme sin segregar los agregados.</li>
+                                <li>Iniciar el curado oportuno y mantener la superficie húmeda durante los primeros días según las condiciones climáticas.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="crew-box">
-                        <h3>Cuadrilla de Asentado</h3>
-                        <table class="data-table" id="table-alb-crew"></table>
-                        <div class="crew-note" id="note-alb-crew"></div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- MODULE 3: EARTHWORKS -->
-            <section id="tierras" class="panel">
-                <div class="panel-header">
-                    <h2>Movimiento de Tierras</h2>
-                    <span class="norm-badge">RNE E.050</span>
-                </div>
+                <!-- MODULE 2: MASONRY -->
+                <section id="albanileria" class="panel">
+                    <div class="panel-header">
+                        <h2>Metrado de Albañilería</h2>
+                        <span class="norm-badge">RNE E.070</span>
+                    </div>
 
-                <div class="reading-box">
-                    <p><strong>Criterio Técnico:</strong> Evalúa el cambio volumétrico del terreno entre su estado in situ (en banco) y su estado suelto tras la excavación (esponjamiento), determinando el volumen exacto para eliminación en volquete.</p>
-                </div>
+                    <div class="reading-box">
+                        <p><strong>Criterio Técnico:</strong> La Norma Técnica E.070 establece los requisitos de diseño y construcción para albañilería estructural y tabiquería. El metrado de unidades y mortero depende de las dimensiones modulares del ladrillo, el espesor de junta y el aparejo elegido.</p>
+                    </div>
 
-                <div class="grid-form">
-                    <div class="form-group">
-                        <label>Volumen en Banco (m³)</label>
-                        <input type="number" id="tie-exc" value="40.0" step="1" min="0.5">
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Área Neta del Muro (m²)</label>
+                            <input type="number" id="alb-area" value="25.0" step="0.5" min="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Aparejo</label>
+                            <select id="alb-aparejo">
+                                <option value="soga" selected>Soga (e = 13 cm)</option>
+                                <option value="cabeza">Cabeza (e = 24 cm)</option>
+                                <option value="canto">Canto (e = 9 cm)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Unidad de Albañilería</label>
+                            <select id="alb-unidad">
+                                <option value="24,13,9" selected>King Kong 18H (24x13x9 cm)</option>
+                                <option value="23,12.5,9">King Kong Artesanal (23x12.5x9 cm)</option>
+                                <option value="24,11.5,9">Pandereta (24x11.5x9 cm)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Junta y Mortero</label>
+                            <select id="alb-junta">
+                                <option value="1.5,5" selected>Junta 1.5 cm — Mortero 1:5</option>
+                                <option value="1.5,4">Junta 1.5 cm — Mortero 1:4</option>
+                                <option value="1.0,5">Junta 1.0 cm — Mortero 1:5</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Relleno Compactado (m³)</label>
-                        <input type="number" id="tie-rel" value="18.0" step="1" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Suelo</label>
-                        <select id="tie-suelo">
-                            <option value="0.15,0.90">Arena / Grava (Esp. 15%)</option>
-                            <option value="0.25,0.85" selected>Tierra Común / Limo (Esp. 25%)</option>
-                            <option value="0.35,0.80">Arcilla Compacta (Esp. 35%)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tolva Volquete</label>
-                        <select id="tie-volquete">
-                            <option value="10">Volquete 10 m³</option>
-                            <option value="15" selected>Volquete 15 m³</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-calc" onclick="calcTierras()">Calcular Balance</button>
+                    <button class="btn-calc" onclick="calcAlbanileria()">Calcular Insumos</button>
 
-                <div id="res-tierras" class="results-wrapper">
-                    <div class="result-box">
-                        <h3>Balance Volumétrico</h3>
-                        <table class="data-table" id="table-tie-mat"></table>
+                    <div id="res-albanileria" class="results-wrapper">
+                        <div class="result-box">
+                            <h3>Insumos de Albañilería</h3>
+                            <table class="data-table" id="table-alb-mat"></table>
+                        </div>
+                        <div class="crew-box">
+                            <h3>Cuadrilla de Asentado</h3>
+                            <table class="data-table" id="table-alb-crew"></table>
+                            <div class="crew-note" id="note-alb-crew"></div>
+                        </div>
                     </div>
-                    <div class="crew-box">
-                        <h3>Cuadrilla Excavación</h3>
-                        <table class="data-table" id="table-tie-crew"></table>
-                        <div class="crew-note" id="note-tie-crew"></div>
-                    </div>
-                </div>
-            </section>
 
-            <!-- MODULE 4: REBAR -->
-            <section id="acero" class="panel">
-                <div class="panel-header">
-                    <h2>Acero Corrugado</h2>
-                    <span class="norm-badge">ASTM A615 / RNE E.060</span>
-                </div>
+                    <div class="guide-section">
+                        <div class="guide-card">
+                            <h3>Metrado de Unidades y Mortero en Muros</h3>
+                            <p>Para calcular la cantidad de unidades por metro cuadrado se divide 1.00 m² entre el área efectiva que ocupa cada unidad sumando el espesor de la junta horizontal y vertical. El volumen de mortero corresponde a la diferencia entre el volumen total del muro y el volumen neto ocupado por los ladrillos, incrementado por desperdicio.</p>
 
-                <div class="reading-box">
-                    <p><strong>Criterio Técnico:</strong> Estima el peso total de barras de refuerzo basándose en el diámetro nominal y su peso lineal reglamentario, considerando mermas por cortes y traslapes normados.</p>
-                </div>
+                            <h4>Consideraciones de Aparejo y Normativa</h4>
+                            <table class="ref-table">
+                                <thead>
+                                    <tr>
+                                        <th>Aparejo</th>
+                                        <th>Posición de la Unidad</th>
+                                        <th>Aplicación Habitual</th>
+                                        <th>Rendimiento Ref.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Soga</td>
+                                        <td>Largo y altura en el plano del muro</td>
+                                        <td>Muros portantes y tabiques de espesor intermedio</td>
+                                        <td>9.0 m²/día</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cabeza</td>
+                                        <td>Ancho (tizón) en el plano del muro</td>
+                                        <td>Muros portantes de mayor espesor y resistencia lateral</td>
+                                        <td>6.5 m²/día</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Canto</td>
+                                        <td>Largo y espesor menor en el plano</td>
+                                        <td>Tabiquería no portante de bajo peso propio</td>
+                                        <td>10.5 m²/día</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                <div class="grid-form">
-                    <div class="form-group">
-                        <label>Diámetro Nominal</label>
-                        <select id="ace-diam">
-                            <option value="0.222,6mm">6 mm (0.222 kg/m)</option>
-                            <option value="0.560,3/8&quot;">3/8" (0.560 kg/m)</option>
-                            <option value="0.994,1/2&quot;" selected>1/2" (0.994 kg/m)</option>
-                            <option value="1.552,5/8&quot;">5/8" (1.552 kg/m)</option>
-                            <option value="2.235,3/4&quot;">3/4" (2.235 kg/m)</option>
-                            <option value="3.973,1&quot;">1" (3.973 kg/m)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Longitud Acumulada (m)</label>
-                        <input type="number" id="ace-long" value="180" step="1" min="1">
-                    </div>
-                    <div class="form-group">
-                        <label>Desperdicio / Traslapes (%)</label>
-                        <input type="number" id="ace-desp" value="7" step="1" min="0" max="15">
-                    </div>
-                    <div class="form-group">
-                        <label>Varilla Comercial (m)</label>
-                        <input type="number" id="ace-var" value="9.0" step="0.5" min="6">
-                    </div>
-                </div>
-                <button class="btn-calc" onclick="calcAcero()">Calcular Peso</button>
+                            <h4>Ejemplo Práctico Resuelto</h4>
+                            <div class="example-box">
+                                En un muro de <strong>25.0 m²</strong> en aparejo de soga con unidad de 24×13×9 cm y junta de 1.5 cm, el módulo horizontal es <code>0.24 + 0.015 = 0.255 m</code> y el vertical <code>0.09 + 0.015 = 0.105 m</code>. La densidad teórica es <code>1 / (0.255 × 0.105) ≈ 37.35 und/m²</code>, multiplicada por el área y el factor de desperdicio para obtener el pedido total.
+                            </div>
 
-                <div id="res-acero" class="results-wrapper">
-                    <div class="result-box">
-                        <h3>Metrado de Acero</h3>
-                        <table class="data-table" id="table-ace-mat"></table>
+                            <h4>Buenas Prácticas en Obra</h4>
+                            <ul>
+                                <li>Verificar la succión y limpieza de las unidades antes del asentado; los ladrillos cerámicos porosos suelen humedecerse ligeramente según especificación.</li>
+                                <li>Controlar la horizontalidad de las hiladas con escantillón y plomada para garantizar juntas uniformes.</li>
+                                <li>Respetar los límites de altura de asentado por jornada para evitar desplazamientos o aplastamiento del mortero fresco.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="crew-box">
-                        <h3>Cuadrilla Habilitación</h3>
-                        <table class="data-table" id="table-ace-crew"></table>
-                        <div class="crew-note" id="note-ace-crew"></div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- MODULE 5: FORMWORK -->
-            <section id="encofrado" class="panel">
-                <div class="panel-header">
-                    <h2>Encofrados</h2>
-                    <span class="norm-badge">RNE E.060 Cap. 6</span>
-                </div>
+                <!-- MODULE 3: EARTHWORKS -->
+                <section id="tierras" class="panel">
+                    <div class="panel-header">
+                        <h2>Movimiento de Tierras</h2>
+                        <span class="norm-badge">RNE E.050</span>
+                    </div>
 
-                <div class="reading-box">
-                    <p><strong>Criterio Técnico:</strong> Cuantifica los requerimientos de madera en pies tablares (p2) y elementos de sujeción por metro cuadrado de área de contacto, según el número de usos y plazos normativos de desencofrado.</p>
-                </div>
+                    <div class="reading-box">
+                        <p><strong>Criterio Técnico:</strong> El movimiento de tierras analiza el comportamiento volumétrico de los suelos según la Norma E.050 y las prácticas de metrados. Un mismo suelo ocupa distinto volumen en banco (natural), suelto (excavado) y compactado (relleno).</p>
+                    </div>
 
-                <div class="grid-form">
-                    <div class="form-group">
-                        <label>Elemento Estructural</label>
-                        <select id="enc-elem">
-                            <option value="columna" selected>Columnas (10 m²/día)</option>
-                            <option value="viga">Vigas Peraltadas (9 m²/día)</option>
-                            <option value="losa">Losas Aligeradas (12 m²/día)</option>
-                            <option value="sobrecimiento">Sobrecimientos (14 m²/día)</option>
-                        </select>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Volumen en Banco (m³)</label>
+                            <input type="number" id="tie-exc" value="40.0" step="1" min="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Relleno Compactado (m³)</label>
+                            <input type="number" id="tie-rel" value="18.0" step="1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Suelo</label>
+                            <select id="tie-suelo">
+                                <option value="0.15,0.90">Arena / Grava (Esp. 15%)</option>
+                                <option value="0.25,0.85" selected>Tierra Común / Limo (Esp. 25%)</option>
+                                <option value="0.35,0.80">Arcilla Compacta (Esp. 35%)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tolva Volquete</label>
+                            <select id="tie-volquete">
+                                <option value="10">Volquete 10 m³</option>
+                                <option value="15" selected>Volquete 15 m³</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Área de Contacto (m²)</label>
-                        <input type="number" id="enc-area" value="32.0" step="0.5" min="0.5">
-                    </div>
-                    <div class="form-group">
-                        <label>Usos de la Madera</label>
-                        <select id="enc-usos">
-                            <option value="4">4 usos (Corriente)</option>
-                            <option value="7" selected>7 usos (Tornillo)</option>
-                            <option value="15">15 usos (Triplay)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Carga Viva Obra</label>
-                        <select id="enc-carga">
-                            <option value="200" selected>Convencional (200 kg/m²)</option>
-                            <option value="300">Motorizado (300 kg/m²)</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-calc" onclick="calcEncofrado()">Calcular Insumos</button>
+                    <button class="btn-calc" onclick="calcTierras()">Calcular Balance</button>
 
-                <div id="res-encofrado" class="results-wrapper">
-                    <div class="result-box">
-                        <h3>Insumos de Encofrado</h3>
-                        <table class="data-table" id="table-enc-mat"></table>
+                    <div id="res-tierras" class="results-wrapper">
+                        <div class="result-box">
+                            <h3>Balance Volumétrico</h3>
+                            <table class="data-table" id="table-tie-mat"></table>
+                        </div>
+                        <div class="crew-box">
+                            <h3>Cuadrilla Excavación</h3>
+                            <table class="data-table" id="table-tie-crew"></table>
+                            <div class="crew-note" id="note-tie-crew"></div>
+                        </div>
                     </div>
-                    <div class="crew-box">
-                        <h3>Cuadrilla Carpintería</h3>
-                        <table class="data-table" id="table-enc-crew"></table>
-                        <div class="crew-note" id="note-enc-crew"></div>
+
+                    <div class="guide-section">
+                        <div class="guide-card">
+                            <h3>Esponjamiento, Compactación y Eliminación</h3>
+                            <p>Al excavar un suelo en su estado natural (banco), se rompe su estructura y aumenta su índice de vacíos, produciendo un incremento de volumen llamado <strong>esponjamiento</strong>. Por el contrario, al compactar material suelto en capas para un relleno estructural, el volumen se reduce respecto al estado suelto.</p>
+
+                            <h4>Comportamiento Típico de Suelos</h4>
+                            <table class="ref-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo de Suelo</th>
+                                        <th>Esponjamiento Aprox.</th>
+                                        <th>Factor Compactación</th>
+                                        <th>Observación de Campo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Arena / Grava</td>
+                                        <td>15%</td>
+                                        <td>0.90</td>
+                                        <td>Buen drenaje; requiere control de humedad y confinamiento</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tierra Común / Limo</td>
+                                        <td>25%</td>
+                                        <td>0.85</td>
+                                        <td>Frecuente en excavaciones de zanjas y cimentaciones</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Arcilla Compacta</td>
+                                        <td>35%</td>
+                                        <td>0.80</td>
+                                        <td>Alta plasticidad; sensible a cambios de humedad</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Ejemplo Práctico Resuelto</h4>
+                            <div class="example-box">
+                                Si se excavan <strong>40.0 m³</strong> en banco de tierra común con <strong>25%</strong> de esponjamiento, el volumen suelto excavado es <code>40.0 × 1.25 = 50.0 m³</code>. Al restar el volumen equivalente requerido para el relleno compactado y dividir el excedente entre la capacidad de tolva (ej. 15 m³), se estima la cantidad de viajes de eliminación.
+                            </div>
+
+                            <h4>Buenas Prácticas en Obra</h4>
+                            <ul>
+                                <li>Mantener taludes estables y entibados o protecciones adecuadas cuando la profundidad de excavación lo requiera.</li>
+                                <li>Ejecutar rellenos en capas uniformes (usualmente de 15 a 20 cm) compactando cada capa antes de colocar la siguiente.</li>
+                                <li>Evacuar aguas superficiales o filtraciones para no saturar el fondo de cimentación.</li>
+                            </ul>
+                        </div>
                     </div>
+                </section>
+
+                <!-- MODULE 4: REBAR -->
+                <section id="acero" class="panel">
+                    <div class="panel-header">
+                        <h2>Acero Corrugado</h2>
+                        <span class="norm-badge">ASTM A615 / RNE E.060</span>
+                    </div>
+
+                    <div class="reading-box">
+                        <p><strong>Criterio Técnico:</strong> El metrado de acero de refuerzo determina la masa total en kilogramos a partir de la longitud acumulada de cada diámetro y su peso nominal por metro lineal, incorporando un porcentaje por cortes, despuntes y empalmes/traslapes.</p>
+                    </div>
+
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Diámetro Nominal</label>
+                            <select id="ace-diam">
+                                <option value="0.222,6mm">6 mm (0.222 kg/m)</option>
+                                <option value="0.560,3/8&quot;">3/8" (0.560 kg/m)</option>
+                                <option value="0.994,1/2&quot;" selected>1/2" (0.994 kg/m)</option>
+                                <option value="1.552,5/8&quot;">5/8" (1.552 kg/m)</option>
+                                <option value="2.235,3/4&quot;">3/4" (2.235 kg/m)</option>
+                                <option value="3.973,1&quot;">1" (3.973 kg/m)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Longitud Acumulada (m)</label>
+                            <input type="number" id="ace-long" value="180" step="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Desperdicio / Traslapes (%)</label>
+                            <input type="number" id="ace-desp" value="7" step="1" min="0" max="15">
+                        </div>
+                        <div class="form-group">
+                            <label>Varilla Comercial (m)</label>
+                            <input type="number" id="ace-var" value="9.0" step="0.5" min="6">
+                        </div>
+                    </div>
+                    <button class="btn-calc" onclick="calcAcero()">Calcular Peso</button>
+
+                    <div id="res-acero" class="results-wrapper">
+                        <div class="result-box">
+                            <h3>Metrado de Acero</h3>
+                            <table class="data-table" id="table-ace-mat"></table>
+                        </div>
+                        <div class="crew-box">
+                            <h3>Cuadrilla Habilitación</h3>
+                            <table class="data-table" id="table-ace-crew"></table>
+                            <div class="crew-note" id="note-ace-crew"></div>
+                        </div>
+                    </div>
+
+                    <div class="guide-section">
+                        <div class="guide-card">
+                            <h3>Cálculo de Peso, Varillas y Alambre de Amarre</h3>
+                            <p>En presupuestos y compras de obra, el acero corrugado se cotiza y controla principalmente por peso (kg), mientras que el abastecimiento logístico considera el número de varillas comerciales (comúnmente de 9.0 m o 12.0 m) y el alambre negro recocido N° 16 para amarres.</p>
+
+                            <h4>Pesos Nominales por Metro Lineal</h4>
+                            <table class="ref-table">
+                                <thead>
+                                    <tr>
+                                        <th>Designación</th>
+                                        <th>Peso Nominal (kg/m)</th>
+                                        <th>Uso Frecuente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>6 mm</td>
+                                        <td>0.222</td>
+                                        <td>Estribos ligeros o refuerzo de temperatura menor</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3/8"</td>
+                                        <td>0.560</td>
+                                        <td>Estribos de columnas y vigas, refuerzo distribuido</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1/2"</td>
+                                        <td>0.994</td>
+                                        <td>Vigas, columnas, losas y refuerzo longitudinal general</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5/8" / 3/4" / 1"</td>
+                                        <td>1.552 / 2.235 / 3.973</td>
+                                        <td>Elementos estructurales de mayor solicitación y carga</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Ejemplo Práctico Resuelto</h4>
+                            <div class="example-box">
+                                Para <strong>180 m</strong> de barra de <strong>1/2"</strong> (0.994 kg/m) con un <strong>7%</strong> de desperdicio/traslapes: la longitud ajustada es <code>180 × 1.07 = 192.60 m</code>, lo que equivale a <code>192.60 × 0.994 = 191.44 kg</code> y unas <strong>22 varillas</strong> comerciales de 9.0 m.
+                            </div>
+
+                            <h4>Buenas Prácticas en Obra</h4>
+                            <ul>
+                                <li>Respetar los diámetros mínimos de doblado y longitudes de anclaje o empalme indicados en los planos estructurales.</li>
+                                <li>Mantener los recubrimientos mínimos de concreto mediante dados o separadores para proteger el acero de la corrosión.</li>
+                                <li>Almacenar las barras elevadas del suelo y libres de óxido suelto, grasa o lodo.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE 5: FORMWORK -->
+                <section id="encofrado" class="panel">
+                    <div class="panel-header">
+                        <h2>Encofrados</h2>
+                        <span class="norm-badge">RNE E.060 Cap. 6</span>
+                    </div>
+
+                    <div class="reading-box">
+                        <p><strong>Criterio Técnico:</strong> El encofrado es la estructura temporal que moldea y soporta el concreto fresco hasta que adquiere resistencia suficiente para autosostenerse. Su metrado se expresa en metros cuadrados de superficie de contacto y su demanda de madera en pies tablares (p2).</p>
+                    </div>
+
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Elemento Estructural</label>
+                            <select id="enc-elem">
+                                <option value="columna" selected>Columnas (10 m²/día)</option>
+                                <option value="viga">Vigas Peraltadas (9 m²/día)</option>
+                                <option value="losa">Losas Aligeradas (12 m²/día)</option>
+                                <option value="sobrecimiento">Sobrecimientos (14 m²/día)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Área de Contacto (m²)</label>
+                            <input type="number" id="enc-area" value="32.0" step="0.5" min="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Usos de la Madera</label>
+                            <select id="enc-usos">
+                                <option value="4">4 usos (Corriente)</option>
+                                <option value="7" selected>7 usos (Tornillo)</option>
+                                <option value="15">15 usos (Triplay)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Carga Viva Obra</label>
+                            <select id="enc-carga">
+                                <option value="200" selected>Convencional (200 kg/m²)</option>
+                                <option value="300">Motorizado (300 kg/m²)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-calc" onclick="calcEncofrado()">Calcular Insumos</button>
+
+                    <div id="res-encofrado" class="results-wrapper">
+                        <div class="result-box">
+                            <h3>Insumos de Encofrado</h3>
+                            <table class="data-table" id="table-enc-mat"></table>
+                        </div>
+                        <div class="crew-box">
+                            <h3>Cuadrilla Carpintería</h3>
+                            <table class="data-table" id="table-enc-crew"></table>
+                            <div class="crew-note" id="note-enc-crew"></div>
+                        </div>
+                    </div>
+
+                    <div class="guide-section">
+                        <div class="guide-card">
+                            <h3>Diseño Operativo, Pies Tablares y Desencofrado</h3>
+                            <p>El metrado de encofrado se calcula multiplicando el perímetro en contacto con el concreto fresco por la longitud del elemento (sin incluir las caras apoyadas sobre el terreno o elementos ya endurecidos). La cantidad de pies tablares (1 pie tablar = 1" × 1" × 1 pie) varía según el tipo de elemento, apuntalamiento y número de rotaciones o usos previstos.</p>
+
+                            <h4>Parámetros de Referencia por Elemento</h4>
+                            <table class="ref-table">
+                                <thead>
+                                    <tr>
+                                        <th>Elemento</th>
+                                        <th>Factor Ref. (p²/m²)</th>
+                                        <th>Rendimiento Ref.</th>
+                                        <th>Aspecto Crítico</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Columnas</td>
+                                        <td>4.5</td>
+                                        <td>10 m²/día</td>
+                                        <td>Aplomado, estanqueidad de juntas y arriostramiento</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vigas Peraltadas</td>
+                                        <td>5.2</td>
+                                        <td>9 m²/día</td>
+                                        <td>Contraflecha, apuntalamiento firme y fondo nivelado</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Losas Aligeradas</td>
+                                        <td>4.8</td>
+                                        <td>12 m²/día</td>
+                                        <td>Distribución de pies derechos y soleras de carga</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sobrecimientos</td>
+                                        <td>3.8</td>
+                                        <td>14 m²/día</td>
+                                        <td>Alineamiento, separación de caras y apuntalamiento lateral</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Ejemplo Práctico Resuelto</h4>
+                            <div class="example-box">
+                                Para <strong>32.0 m²</strong> de encofrado en columnas con referencia de 4.5 p²/m² y 7 usos estimados, se obtiene una estimación de madera en pies tablares, clavos estructurales y desmoldante, junto con el tiempo de ejecución según el rendimiento diario de carpintería.
+                            </div>
+
+                            <h4>Buenas Prácticas en Obra</h4>
+                            <ul>
+                                <li>Sellar aberturas o juntas entre tablas para evitar pérdidas de lechada de cemento durante el vaciado.</li>
+                                <li>Aplicar desmoldante compatible antes de colocar el acero de refuerzo, cuidando de no contaminar las barras.</li>
+                                <li>Respetar los plazos y criterios normativos de desencofrado según el tipo de elemento y las cargas actuantes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <div>Suite de Ingeniería Civil — Referencia técnica de metrados y rendimientos.</div>
+                <div class="footer-links">
+                    <a href="privacidad.html">Política de Privacidad</a>
+                    <a href="terminos.html">Términos de Uso</a>
                 </div>
-            </section>
-        </main>
+            </footer>
+        </div>
     </div>
 
 <script>
@@ -655,6 +1040,7 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function calcConcreto() {
